@@ -177,6 +177,19 @@ pnud_min %>%
 - `unite` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
 - `separate` faz o inverso de `unite`, e uma coluna em várias usando um separador.
 
+
+```{r}
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  separate(tipo_idhm, c('idhm_nm', 'tipo'), sep = '_') %>% 
+  select(-idhm_nm) %>% 
+  filter(ano == 2010) %>% 
+  group_by(tipo) %>% 
+  summarise(maior = muni[which.max(idhm)], idhm = max(idhm)) %>% 
+  arrange(tipo, desc(idhm))
+```
+
 ### Um pouco mais de transformação de dados
 
 - Para juntar tabelas, usar `inner_join`, `left_join`, `anti_join`, etc.
