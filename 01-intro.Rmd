@@ -28,7 +28,7 @@ A `tibble` nada mais é do que um `data.frame`, mas com um método de impressão
 
 Vamos assumir que temos a seguinte base de dados:
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(dplyr)
 library(tidyr)
 library(abjData)
@@ -57,7 +57,7 @@ pnud_min
 - Utiliza `C` e `C++` por trás da maioria das funções, o que geralmente torna o código mais eficiente.
 - Pode trabalhar com diferentes fontes de dados, como bases relacionais (SQL) e `data.table`.
 
-### `select`
+## `select`
 
 - Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)`, etc.
 - Possível colocar nomes, índices, e intervalos de variáveis com `:`.
@@ -77,7 +77,7 @@ pnud_min %>%
   select(ano, starts_with('idhm'))
 ```
 
-### `filter`
+## `filter`
 
 - Parecido com `subset`.
 - Condições separadas por vírgulas é o mesmo que separar por `&`.
@@ -105,7 +105,7 @@ pnud_min %>%
          ano == 1991)
 ```
 
-### `mutate`
+## `mutate`
 
 - Parecido com `transform`, mas aceita várias novas colunas iterativamente.
 - Novas variáveis devem ter o mesmo `length` que o `nrow` do bd oridinal ou `1`.
@@ -118,7 +118,7 @@ pnud_min %>%
   
 ```
 
-### `arrange`
+## `arrange`
 
 - Simplesmente ordena de acordo com as opções.
 - Utilizar `desc` para ordem decrescente.
@@ -129,7 +129,7 @@ pnud_min %>%
   arrange(desc(espvida))
 ```
 
-### `summarise`
+## `summarise`
 
 - Retorna um vetor de tamanho `1` a partir de uma conta com as variáveis.
 - Geralmente é utilizado em conjunto com `group_by`.
@@ -149,7 +149,7 @@ pnud_min %>%
   mutate(prop = n / sum(n), prop = scales::percent(prop))
 ```
 
-### `gather`
+## `gather`
 
 - "Empilha" o banco de dados
 
@@ -160,7 +160,7 @@ pnud_min %>%
   arrange(desc(idhm))
 ```
 
-### `spread`
+## `spread`
 
 - "Joga" uma variável nas colunas
 - É essencialmente a função inversa de `gather`
@@ -172,7 +172,7 @@ pnud_min %>%
   spread(ano, idhm)
 ```
 
-### Funções auxiliares
+## Funções auxiliares
 
 - `unite` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
 - `separate` faz o inverso de `unite`, e uma coluna em várias usando um separador.
@@ -190,7 +190,7 @@ pnud_min %>%
   arrange(tipo, desc(idhm))
 ```
 
-### Um pouco mais de transformação de dados
+## Um pouco mais de transformação de dados
 
 - Para juntar tabelas, usar `inner_join`, `left_join`, `anti_join`, etc.
 - Para realizar operações mais gerais, usar `do`.
