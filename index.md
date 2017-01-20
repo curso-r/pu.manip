@@ -93,8 +93,6 @@ pnud_min %>%
 
 
 ```r
-library(lubridate)
-## Error in library(lubridate): there is no package called 'lubridate'
 pnud_min %>% 
   select(ano, regiao, uf, idhm) %>% 
   filter(uf %in% c('SP', 'MG') | idhm > .5, ano == 2010)
@@ -171,8 +169,6 @@ pnud_min %>%
 
 
 ```r
-library(tidyr)
-## Error in library(tidyr): there is no package called 'tidyr'
 pnud_min %>% 
   select(uf, muni, ano, starts_with('idhm_')) %>% 
   gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
@@ -198,6 +194,21 @@ pnud_min %>%
 
 - `unite` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
 - `separate` faz o inverso de `unite`, e uma coluna em várias usando um separador.
+
+
+
+```r
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  separate(tipo_idhm, c('idhm_nm', 'tipo'), sep = '_') %>% 
+  select(-idhm_nm) %>% 
+  filter(ano == 2010) %>% 
+  group_by(tipo) %>% 
+  summarise(maior = muni[which.max(idhm)], idhm = max(idhm)) %>% 
+  arrange(tipo, desc(idhm))
+## Error in eval(expr, envir, enclos): object 'pnud_min' not found
+```
 
 ### Um pouco mais de transformação de dados
 
