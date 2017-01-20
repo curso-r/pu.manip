@@ -89,7 +89,6 @@ pnud_min %>%
 ```
 
 ```{r}
-library(lubridate)
 pnud_min %>% 
   select(ano, regiao, uf, idhm) %>% 
   filter(uf %in% c('SP', 'MG') | idhm > .5, ano == 2010)
@@ -155,7 +154,6 @@ pnud_min %>%
 - "Empilha" o banco de dados
 
 ```{r warning=FALSE, message=FALSE}
-library(tidyr)
 pnud_min %>% 
   select(uf, muni, ano, starts_with('idhm_')) %>% 
   gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
