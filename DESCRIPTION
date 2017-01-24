@@ -1,4 +1,4 @@
-Package: PU_NAME
+Package: pu.manip
 Title: PACKAGE_DESCRIPTION
 Version: 0.0.1
 Authors@R: c(
