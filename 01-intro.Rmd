@@ -9,11 +9,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-> "(...) The fact that data science exists as a field is a colossal failure of statistics. To me, [what I do] is what statistics is all about. It is gaining insight from data using modelling and visualization. Data munging and manipulation is hard and statistics has just said that’s not our domain."
+> "(...) The fact that data science exists as a field is a colossal failure of statistics. To me, what I do is what statistics is all about. It is gaining insight from data using modelling and visualization. Data munging and manipulation is hard and statistics has just said that’s not our domain."
 > 
 > Hadley Wickham
 
-[!transform](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
+![transform](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
 
 ## Pacotes `dplyr` e `tidyr`
 
@@ -79,6 +79,8 @@ A base contém `r nrow(pnud_min)` linhas e `r ncol(pnud_min)` colunas, descritas
 - Utiliza `C` e `C++` por trás da maioria das funções, o que geralmente torna o código mais eficiente.
 - Pode trabalhar com diferentes fontes de dados, como bases relacionais (SQL) e `data.table`.
 
+-----------------------------------------------------
+
 ## `select`
 
 - Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)`, etc.
@@ -98,6 +100,8 @@ pnud_min %>%
 pnud_min %>% 
   select(ano, starts_with('idhm'))
 ```
+
+-----------------------------------------------------
 
 ## `filter`
 
@@ -127,6 +131,8 @@ pnud_min %>%
          ano == 1991)
 ```
 
+-----------------------------------------------------
+
 ## `mutate`
 
 - Parecido com `transform`, mas aceita várias novas colunas iterativamente.
@@ -140,6 +146,8 @@ pnud_min %>%
   
 ```
 
+-----------------------------------------------------
+
 ## `arrange`
 
 - Simplesmente ordena de acordo com as opções.
@@ -150,6 +158,8 @@ pnud_min %>%
   filter(ano == 2010) %>% 
   arrange(desc(espvida))
 ```
+
+-----------------------------------------------------
 
 ## `summarise`
 
@@ -171,6 +181,9 @@ pnud_min %>%
   mutate(prop = n / sum(n), prop = scales::percent(prop))
 ```
 
+
+-----------------------------------------------------
+
 ## `gather`
 
 - "Empilha" o banco de dados
@@ -181,6 +194,8 @@ pnud_min %>%
   gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
   arrange(desc(idhm))
 ```
+
+-----------------------------------------------------
 
 ## `spread`
 
