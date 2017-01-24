@@ -184,6 +184,17 @@ pnud_min %>%
 ## # ... with 56 more rows
 ```
 
+Para fazer várias condições, use os operadores lógicos (`&` e `|`) ou separando filtros entre vírgulas.
+
+<div class='admonition note'>
+<p class='admonition-title'>
+`%in%`
+</p>
+<p>
+`%in%` é um operador muito útil para trabalhar com vetores. O resultado da operação é um vetor lógico do tamanho do vetor do elemento da esquerda, identificando quais elementos da esquerda batem com algum elemento da direita.
+</p>
+</div>
+
 
 ```r
 pnud_min %>% 
@@ -206,7 +217,6 @@ pnud_min %>%
   # é igual a
   # filter(uf %in% c('SP', 'MG') | idhm > .5 & ano == 2010)
 ```
-
 
 
 ```r
@@ -395,11 +405,12 @@ pnud_min %>%
 ## # ... with 16,676 more rows
 ```
 
+-----------------------------------------------------
+
 ## Funções auxiliares
 
 - `unite` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
 - `separate` faz o inverso de `unite`, e uma coluna em várias usando um separador.
-
 
 
 ```r
@@ -420,11 +431,14 @@ pnud_min %>%
 ## 3     r SÃO CAETANO DO SUL 0.891
 ```
 
+-----------------------------------------------------
+
 ## Um pouco mais de transformação de dados
 
 - Para juntar tabelas, usar `inner_join`, `left_join`, `anti_join`, etc.
 - Para realizar operações mais gerais, usar `do`.
 - Para retirar duplicatas, utilizar `distinct`.
+
 
 
 
