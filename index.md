@@ -1,6 +1,6 @@
 ---
 title: Introdução
-date: '2017-01-23'
+date: '2017-01-24'
 ---
 
 
@@ -17,15 +17,15 @@ date: '2017-01-23'
 
 A transformação de dados é uma tarefa dolorosa e demorada, tomando muitas vezes a maior parte do tempo de uma análise estatística.
 
-O `dplyr` é um dos pacotes mais úteis para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados, sem perder velocidade de execução.
+O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados, sem perder velocidade de execução.
 
-Por ser um pacote que se propõe a auxiliar num dos trabalhos mais árduos da análise estatística e por atingir esse objetivo de forma elegante, eficaz e eficiente, o `dplyr` pode ser considerado como uma revolução no `R`.
+O `dplyr` pode ser considerado como uma revolução no `R`, por auxiliar num dos trabalhos mais árduos da análise estatística, atingindo esse objetivo de forma elegante, eficaz e eficiente.
 
 ### Trabalhando com `tibble`s
 
-A `tibble` nada mais é do que um `data.frame`, mas com um método de impressão mais adequado. Outras diferenças podem ser estudadas [neste link](http://r4ds.had.co.nz/tibbles.html).
+Uma `tibble` nada mais é do que um `data.frame`, mas com um método de impressão mais adequado. Outras diferenças podem ser estudadas [neste link](http://r4ds.had.co.nz/tibbles.html).
 
-Vamos assumir que temos a seguinte base de dados:
+Considere a seguinte base de dados.
 
 
 
