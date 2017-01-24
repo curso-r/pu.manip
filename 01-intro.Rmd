@@ -39,19 +39,40 @@ library(abjData)
 pnud_min
 ```
 
-### As cinco funções principais do `dplyr`
+## Base IDH-Municipal - PNUD
 
-- `filter`
-- `mutate`
-- `select`
-- `arrange`
-- `summarise`
+Nessa seção vamos trabalhar com uma base simplificada do [PNUD (Programa das Nações Unidas para o Desenvolvimento)](http://www.atlasbrasil.org.br/2013/pt/download/base/), contendo informações socioeconômicas de todos os municípios do país. Os resultados foram obtidos a partir dos Censos de 1991, 2000 e 2010.
+
+A base contém `r nrow(pnud_min)` linhas e `r ncol(pnud_min)` colunas, descritas abaixo:
+
+- `ano` ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
+- `muni` nome do município. Cada município aparece três vezes, um para cada ano.
+- `uf` Unidade Federativa.
+- `regiao` região brasileira.
+- `idhm` IDH municipal, dividido em
+    - `idhm_e` IDH municipal - educação.
+    - `idhm_l` IDH municipal - longevidade.
+    - `idhm_r` IDH municipal - renda.
+- `espvida` expectativa de vida.
+- `rdpc` renda *per capita*.
+- `gini` coeficiente de gini municipal (mede desigualdade social).
+- `pop` população residente do município.
+- `lat`, `lon` latitude e longitude do município (ponto médio).
+
+## Os cinco verbos do `dplyr`
+
+- `filter`: filtrar linhas.
+- `select`: selecionar colunas.
+- `mutate`: criar/modificar colunas.
+- `arrange`: ordenar a base.
+- `summarise`: sumarizar a base em uma linha.
 
 ### Características
 
 - O _input_  é sempre uma `tibble`, e o _output_  é sempre um `tibble`.
 - No primeiro argumento colocamos o `tibble`, e nos outros argumentos colocamos o que queremos fazer.
-- A utilização é facilitada com o emprego do operador `%>%`
+- A utilização é facilitada com o emprego do operador `%>%`.
+- O pacote faz uso extensivo de NSE (*non standard evaluation*).
 
 ### Vantagens
 
