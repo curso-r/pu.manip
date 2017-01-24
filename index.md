@@ -7,11 +7,11 @@ date: '2017-01-24'
 
 
 
-> "(...) The fact that data science exists as a field is a colossal failure of statistics. To me, [what I do] is what statistics is all about. It is gaining insight from data using modelling and visualization. Data munging and manipulation is hard and statistics has just said that’s not our domain."
+> "(...) The fact that data science exists as a field is a colossal failure of statistics. To me, what I do is what statistics is all about. It is gaining insight from data using modelling and visualization. Data munging and manipulation is hard and statistics has just said that’s not our domain."
 > 
 > Hadley Wickham
 
-[!transform](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
+![transform](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
 
 ## Pacotes `dplyr` e `tidyr`
 
@@ -89,6 +89,8 @@ A base contém 16686 linhas e 14 colunas, descritas abaixo:
 - Utiliza `C` e `C++` por trás da maioria das funções, o que geralmente torna o código mais eficiente.
 - Pode trabalhar com diferentes fontes de dados, como bases relacionais (SQL) e `data.table`.
 
+-----------------------------------------------------
+
 ## `select`
 
 - Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)`, etc.
@@ -153,6 +155,8 @@ pnud_min %>%
 ## 10  1991 0.468  0.247  0.662  0.625
 ## # ... with 16,676 more rows
 ```
+
+-----------------------------------------------------
 
 ## `filter`
 
@@ -227,6 +231,8 @@ pnud_min %>%
 ## # ... with 960 more rows
 ```
 
+-----------------------------------------------------
+
 ## `mutate`
 
 - Parecido com `transform`, mas aceita várias novas colunas iterativamente.
@@ -254,6 +260,8 @@ pnud_min %>%
 ## # ... with 16,676 more rows, and 1 more variables: razao <dbl>
 ```
 
+-----------------------------------------------------
+
 ## `arrange`
 
 - Simplesmente ordena de acordo com as opções.
@@ -280,6 +288,8 @@ pnud_min %>%
 ## # ... with 5,552 more rows, and 6 more variables: espvida <dbl>,
 ## #   rdpc <dbl>, gini <dbl>, pop <int>, lat <dbl>, lon <dbl>
 ```
+
+-----------------------------------------------------
 
 ## `summarise`
 
@@ -327,6 +337,9 @@ pnud_min %>%
 ## 5        Norte   449  8.1%
 ```
 
+
+-----------------------------------------------------
+
 ## `gather`
 
 - "Empilha" o banco de dados
@@ -352,6 +365,8 @@ pnud_min %>%
 ## 10    SC        PORTO UNIÃO  2010    idhm_l 0.891
 ## # ... with 50,048 more rows
 ```
+
+-----------------------------------------------------
 
 ## `spread`
 
