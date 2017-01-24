@@ -9,12 +9,11 @@ Authors@R: c(
     person("Fernando", "Correa", email = "fptcorrea@gmail.com", role = "aut"))
 Description: PACKAGE_DESCRIPTION.
 Depends:
-  R (>= 3.2.1)
+    R (>= 3.2.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Remotes:
-    curso-r/puBuild,
+Remotes: curso-r/puBuild,
     abjur/abjData
 Imports:
     puBuild,
@@ -25,3 +24,4 @@ Imports:
     abjData,
     knitr,
     rmarkdown
+RoxygenNote: 5.0.1
