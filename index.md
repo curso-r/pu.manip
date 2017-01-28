@@ -1,6 +1,6 @@
 ---
 title: Introdução
-date: '2017-01-24'
+date: '2017-01-28'
 ---
 
 
@@ -11,15 +11,27 @@ date: '2017-01-24'
 > 
 > Hadley Wickham
 
-![transform](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
+Esta sessão trata do tema *transformação de dados*. Trata-se de uma tarefa dolorosa e demorada, tomando muitas vezes a maior parte do tempo de uma análise estatística. Essa etapa é essencial em qualquer análise de dados e, apesar de negligenciada pela academia, é decisiva para o sucesso de estudos aplicados.
+
+Usualmente, o cientista de dados parte de uma base "crua" e a transforma até obter uma base de dados analítica. A base crua pode ser não estruturada, semi-estruturada ou estruturada. Já a base analítica é necessariamente estruturada e está preparada para passar por análises estatísticas a menos de transformações simples. 
+
+Um conceito importante para obtenção de uma base analítica é o *data tidying*, ou arrumação de dados. Uma base é considerada *tidy* se
+
+1. Cada linha da base representa uma observação.
+2. Cada coluna da base representa uma variável.
+3. ~~Cada tabela considera informações de uma unidade amostral.~~
+
+A base de dados analítica é estruturada de tal forma que pode ser colocada diretamente em sistemas de modelagem estatística ou de visualização. Nem sempre uma base de dados analítica está no formato *tidy*, mas usualmente são necessários poucos passos para migrar de uma para outra.
+
+A Figura \@ref(fig:transform) mostra a fase de "disputa" com os dados (*data wrangling*) para deixá-los no formato analítico.
+
+<img src="http://r4ds.had.co.nz/diagrams/data-science-wrangle.png" title="Transformação no ciclo da ciência de dados." alt="Transformação no ciclo da ciência de dados." width="60%" height="60%" />
 
 ## Pacotes `dplyr` e `tidyr`
 
-A transformação de dados é uma tarefa dolorosa e demorada, tomando muitas vezes a maior parte do tempo de uma análise estatística.
-
 O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados, sem perder velocidade de execução.
 
-O `dplyr` pode ser considerado como uma revolução no `R`, por auxiliar num dos trabalhos mais árduos da análise estatística, atingindo esse objetivo de forma elegante, eficaz e eficiente.
+Antes de apresentar com as principais funções do `dplyr` e do `tidyr`, precisamos trabalhar com o conceito de `tibbles`.
 
 ### Trabalhando com `tibble`s
 
@@ -70,6 +82,8 @@ A base contém 16686 linhas e 14 colunas, descritas abaixo:
 - `lat`, `lon` latitude e longitude do município (ponto médio).
 
 ## Os cinco verbos do `dplyr`
+
+As funções principais do `dplyr` são
 
 - `filter`: filtrar linhas.
 - `select`: selecionar colunas.
