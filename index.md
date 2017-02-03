@@ -1,6 +1,6 @@
 ---
 title: Introdução
-date: '2017-01-28'
+date: '2017-02-03'
 ---
 
 
@@ -11,7 +11,7 @@ date: '2017-01-28'
 > 
 > Hadley Wickham
 
-Esta sessão trata do tema *transformação de dados*. Trata-se de uma tarefa dolorosa e demorada, tomando muitas vezes a maior parte do tempo de uma análise estatística. Essa etapa é essencial em qualquer análise de dados e, apesar de negligenciada pela academia, é decisiva para o sucesso de estudos aplicados.
+Esta seção trata do tema *transformação de dados*. Trata-se de uma tarefa dolorosa e demorada, tomando muitas vezes a maior parte do tempo de uma análise estatística. Essa etapa é essencial em qualquer análise de dados e, apesar de negligenciada pela academia, é decisiva para o sucesso de estudos aplicados.
 
 Usualmente, o cientista de dados parte de uma base "crua" e a transforma até obter uma base de dados analítica. A base crua pode ser não estruturada, semi-estruturada ou estruturada. Já a base analítica é necessariamente estruturada e está preparada para passar por análises estatísticas a menos de transformações simples. 
 
@@ -29,7 +29,7 @@ A Figura \@ref(fig:transform) mostra a fase de "disputa" com os dados (*data wra
 
 ## Pacotes `dplyr` e `tidyr`
 
-O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados, sem perder velocidade de execução.
+O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados sem perder velocidade de execução.
 
 Antes de apresentar com as principais funções do `dplyr` e do `tidyr`, precisamos trabalhar com o conceito de `tibbles`.
 
@@ -67,19 +67,19 @@ Nessa seção vamos trabalhar com uma base simplificada do [PNUD (Programa das N
 
 A base contém 16686 linhas e 14 colunas, descritas abaixo:
 
-- `ano` ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
-- `muni` nome do município. Cada município aparece três vezes, um para cada ano.
-- `uf` Unidade Federativa.
-- `regiao` região brasileira.
-- `idhm` IDH municipal, dividido em
-    - `idhm_e` IDH municipal - educação.
-    - `idhm_l` IDH municipal - longevidade.
-    - `idhm_r` IDH municipal - renda.
-- `espvida` expectativa de vida.
-- `rdpc` renda *per capita*.
-- `gini` coeficiente de gini municipal (mede desigualdade social).
-- `pop` população residente do município.
-- `lat`, `lon` latitude e longitude do município (ponto médio).
+- `ano` - ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
+- `muni` - nome do município. Cada município aparece três vezes, um para cada ano.
+- `uf` - Unidade Federativa.
+- `regiao` - região brasileira.
+- `idhm` - IDH municipal, dividido em
+    - `idhm_e` - IDH municipal - educação.
+    - `idhm_l` - IDH municipal - longevidade.
+    - `idhm_r` - IDH municipal - renda.
+- `espvida` - expectativa de vida.
+- `rdpc` - renda *per capita*.
+- `gini` - coeficiente de gini municipal (mede desigualdade social).
+- `pop` - população residente do município.
+- `lat`, `lon` - latitude e longitude do município (ponto médio).
 
 ## Os cinco verbos do `dplyr`
 
@@ -93,8 +93,8 @@ As funções principais do `dplyr` são
 
 ### Características
 
-- O _input_  é sempre uma `tibble`, e o _output_  é sempre um `tibble`.
-- No primeiro argumento colocamos o `tibble`, e nos outros argumentos colocamos o que queremos fazer.
+- O _input_  é sempre uma `tibble` e o _output_  é sempre um `tibble`.
+- Colocamos o `tibble` no primeiro argumento e o que queremos fazer nos outros argumentos.
 - A utilização é facilitada com o emprego do operador `%>%`.
 - O pacote faz uso extensivo de NSE (*non standard evaluation*).
 
@@ -107,8 +107,8 @@ As funções principais do `dplyr` são
 
 ## `select`
 
-- Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)`, etc.
-- Possível colocar nomes, índices, e intervalos de variáveis com `:`.
+- Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)` etc.
+- Possível colocar nomes, índices e intervalos de variáveis com `:`.
 
 
 ```r
@@ -198,14 +198,14 @@ pnud_min %>%
 ## # ... with 56 more rows
 ```
 
-Para fazer várias condições, use os operadores lógicos (`&` e `|`) ou separando filtros entre vírgulas.
+Para fazer várias condições, use os operadores lógicos (`&` e `|`) ou separe filtros entre vírgulas.
 
 <div class='admonition note'>
 <p class='admonition-title'>
-`%in%`
+%in%
 </p>
 <p>
-`%in%` é um operador muito útil para trabalhar com vetores. O resultado da operação é um vetor lógico do tamanho do vetor do elemento da esquerda, identificando quais elementos da esquerda batem com algum elemento da direita.
+<b>%in%</b> é um operador muito útil para trabalhar com vetores. O resultado da operação é um vetor lógico do tamanho do vetor do elemento da esquerda, identificando quais elementos da esquerda batem com algum elemento da direita.
 </p>
 </div>
 
@@ -449,7 +449,7 @@ pnud_min %>%
 
 ## Um pouco mais de transformação de dados
 
-- Para juntar tabelas, usar `inner_join`, `left_join`, `anti_join`, etc.
+- Para juntar tabelas, usar `inner_join`, `left_join`, `anti_join` etc.
 - Para realizar operações mais gerais, usar `do`.
 - Para retirar duplicatas, utilizar `distinct`.
 
