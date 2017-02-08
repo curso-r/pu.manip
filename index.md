@@ -1,6 +1,6 @@
 ---
 title: Introdução
-date: '2017-02-03'
+date: '2017-02-08'
 ---
 
 
@@ -23,7 +23,7 @@ Um conceito importante para obtenção de uma base analítica é o *data tidying
 
 A base de dados analítica é estruturada de tal forma que pode ser colocada diretamente em sistemas de modelagem estatística ou de visualização. Nem sempre uma base de dados analítica está no formato *tidy*, mas usualmente são necessários poucos passos para migrar de uma para outra.
 
-A Figura \@ref(fig:transform) mostra a fase de "disputa" com os dados (*data wrangling*) para deixá-los no formato analítico.
+A Figura abaixo mostra a fase de "disputa" com os dados (*data wrangling*) para deixá-los no formato analítico.
 
 <img src="http://r4ds.had.co.nz/diagrams/data-science-wrangle.png" title="Transformação no ciclo da ciência de dados." alt="Transformação no ciclo da ciência de dados." width="60%" height="60%" />
 
@@ -31,9 +31,9 @@ A Figura \@ref(fig:transform) mostra a fase de "disputa" com os dados (*data wra
 
 O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em `R` que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados sem perder velocidade de execução.
 
-Antes de apresentar com as principais funções do `dplyr` e do `tidyr`, precisamos trabalhar com o conceito de `tibbles`.
+Antes de apresentar as principais funções do `dplyr` e do `tidyr`, precisamos trabalhar com o conceito de `tibbles`.
 
-### Trabalhando com `tibble`s
+### Trabalhando com `tibble`'s
 
 Uma `tibble` nada mais é do que um `data.frame`, mas com um método de impressão mais adequado. Outras diferenças podem ser estudadas [neste link](http://r4ds.had.co.nz/tibbles.html).
 
@@ -63,33 +63,33 @@ pnud_min
 
 ## Base IDH-Municipal - PNUD
 
-Nessa seção vamos trabalhar com uma base simplificada do [PNUD (Programa das Nações Unidas para o Desenvolvimento)](http://www.atlasbrasil.org.br/2013/pt/download/base/), contendo informações socioeconômicas de todos os municípios do país. Os resultados foram obtidos a partir dos Censos de 1991, 2000 e 2010.
+Nessa seção, vamos trabalhar com uma base simplificada do [PNUD (Programa das Nações Unidas para o Desenvolvimento)](http://www.atlasbrasil.org.br/2013/pt/download/base/), contendo informações socioeconômicas de todos os municípios do país. Os resultados foram obtidos a partir dos Censos de 1991, 2000 e 2010.
 
 A base contém 16686 linhas e 14 colunas, descritas abaixo:
 
-- `ano` - ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
-- `muni` - nome do município. Cada município aparece três vezes, um para cada ano.
+- `ano` - Ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
+- `muni` - Nome do município. Cada município aparece três vezes, um para cada ano.
 - `uf` - Unidade Federativa.
-- `regiao` - região brasileira.
+- `regiao` - Região brasileira.
 - `idhm` - IDH municipal, dividido em
     - `idhm_e` - IDH municipal - educação.
     - `idhm_l` - IDH municipal - longevidade.
     - `idhm_r` - IDH municipal - renda.
-- `espvida` - expectativa de vida.
-- `rdpc` - renda *per capita*.
-- `gini` - coeficiente de gini municipal (mede desigualdade social).
-- `pop` - população residente do município.
-- `lat`, `lon` - latitude e longitude do município (ponto médio).
+- `espvida` - Expectativa de vida.
+- `rdpc` - Renda *per capita*.
+- `gini` - Coeficiente de gini municipal (mede desigualdade social).
+- `pop` - População residente do município.
+- `lat`, `lon` - Latitude e longitude do município (ponto médio).
 
 ## Os cinco verbos do `dplyr`
 
-As funções principais do `dplyr` são
+As funções principais do `dplyr` são:
 
-- `filter`: filtrar linhas.
-- `select`: selecionar colunas.
-- `mutate`: criar/modificar colunas.
-- `arrange`: ordenar a base.
-- `summarise`: sumarizar a base em uma linha.
+- `filter` - filtra linhas
+- `select` - seleciona colunas
+- `mutate` - cria/modifica colunas
+- `arrange` - ordena a base
+- `summarise` - sumariza a base
 
 ### Características
 
@@ -107,7 +107,7 @@ As funções principais do `dplyr` são
 
 ## `select`
 
-- Utilizar `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)` etc.
+- Utilizar as funções `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)`.
 - Possível colocar nomes, índices e intervalos de variáveis com `:`.
 
 
@@ -175,7 +175,7 @@ pnud_min %>%
 ## `filter`
 
 - Parecido com `subset`.
-- Condições separadas por vírgulas é o mesmo que separar por `&`.
+- Condições separadas por vírgulas equivalem a separar por `&`.
 
 
 ```r
@@ -198,7 +198,7 @@ pnud_min %>%
 ## # ... with 56 more rows
 ```
 
-Para fazer várias condições, use os operadores lógicos (`&` e `|`) ou separe filtros entre vírgulas.
+Para fazer várias condições, use os operadores lógicos `&` e `|` ou separe filtros entre vírgulas.
 
 <div class='admonition note'>
 <p class='admonition-title'>
@@ -424,7 +424,7 @@ pnud_min %>%
 ## Funções auxiliares
 
 - `unite` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
-- `separate` faz o inverso de `unite`, e uma coluna em várias usando um separador.
+- `separate` faz o inverso de `unite`, transforma uma coluna em várias usando um separador.
 
 
 ```r
@@ -460,24 +460,10 @@ pnud_min %>%
 
 
 
-<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
-
 
 
 
 <script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
-
-
-
-1. Calcule o número de ouro no R.
-
-$$
-\frac{1 + \sqrt{5}}{2}
-$$
-
-<div data-datacamp-exercise data-height="300" data-encoded="true">eyJsYW5ndWFnZSI6InIiLCJzYW1wbGUiOiIjIERpZ2l0ZSBhIGV4cHJlc3NcdTAwZTNvIHF1ZSBjYWxjdWxhIG8gblx1MDBmYW1lcm8gZGUgb3Vyby4iLCJzb2x1dGlvbiI6IigxICsgc3FydCg1KSkvMiIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiMS42MTgwMzRcIiwgaW5jb3JyZWN0X21zZyA9IFwiVGVtIGNlcnRlemEgZGUgcXVlIGluZGljb3UgYSBleHByZXNzXHUwMGUzbyBjb3JyZXRhbWVudGU/XCIpXG5zdWNjZXNzX21zZyhcIkNvcnJldG8hXCIpIn0=</div>
-
-
 
 
 
