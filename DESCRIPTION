@@ -15,8 +15,7 @@ Encoding: UTF-8
 LazyData: true
 Remotes: 
     curso-r/puBuild,
-    abjur/abjData,
-    abjur/tjsp
+    abjur/abjData
 Imports:
     puBuild,
     tutorial,
@@ -25,6 +24,5 @@ Imports:
     stringr,
     abjData,
     knitr,
-    rmarkdown,
-    tjsp
+    rmarkdown
 RoxygenNote: 6.0.1
