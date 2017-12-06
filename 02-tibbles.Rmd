@@ -2,6 +2,12 @@
 author: "Julio Trecenti, William Amorim"
 ---
 
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(abjData)
+```
+
 ## Trabalhando com tibbles
 
 Uma `tibble` nada mais é do que um `data.frame`, mas com um método de impressão mais adequado. 
@@ -33,13 +39,14 @@ A base contém `r nrow(pnud_min)` linhas e `r ncol(pnud_min)` colunas, descritas
 - `pop` - População residente do município.
 - `lat`, `lon` - Latitude e longitude do município (ponto médio).
 
-Considere a seguinte base de dados.
+Para acessar esta base, instale e carregue o pacote `abjData` da seguinte maneira:
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
-library(tidyr)
+```{r, eval=FALSE}
+devtools::install_github("abjur/abjData")
 library(abjData)
 ```
+
+Assim, utilizaremos o objeto `pnud_min` para acessar os dados.
 
 ```{r}
 pnud_min

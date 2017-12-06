@@ -33,7 +33,16 @@ Um conceito importante para obtenção de uma base analítica é o *data tidying
 
 A base de dados analítica é estruturada de tal forma que pode ser colocada diretamente em ambientes de modelagem estatística ou de visualização. Nem sempre uma base de dados analítica está no formato *tidy*, mas usualmente são necessários poucos passos para migrar de uma para outra. A filosofia *tidy* é a base do [tidyverse](https://www.tidyverse.org/).
 
-Os principais pacotes encarregados da tarefa de estruturar os dados são o `dplyr` e o `tidyr`. Eles serão o tema desse tópico.
+Os principais pacotes encarregados da tarefa de estruturar os dados são o `dplyr` e o `tidyr`. Eles serão o tema desse tópico. Instale e carregue os pacotes utilizando:
+
+```{r}
+install.packages("dplyr")
+install.packages("tidyr")
+
+library(dplyr)
+library(tidyr)
+```
+
 
 Mas antes de apresentar as principais funções do `dplyr` e do `tidyr`, precisamos falar sobre o conceito de `tibbles`.
 
