@@ -29,7 +29,29 @@ Um conceito importante para obtenção de uma base analítica é o *data tidying
 
 A base de dados analítica é estruturada de tal forma que pode ser colocada diretamente em ambientes de modelagem estatística ou de visualização. Nem sempre uma base de dados analítica está no formato *tidy*, mas usualmente são necessários poucos passos para migrar de uma para outra. A filosofia *tidy* é a base do [tidyverse](https://www.tidyverse.org/).
 
-Os principais pacotes encarregados da tarefa de estruturar os dados são o `dplyr` e o `tidyr`. Eles serão o tema desse tópico.
+Os principais pacotes encarregados da tarefa de estruturar os dados são o `dplyr` e o `tidyr`. Eles serão o tema desse tópico. Instale e carregue os pacotes utilizando:
+
+
+```r
+install.packages("dplyr")
+## Installing package into '/home/travis/R/Library'
+## (as 'lib' is unspecified)
+install.packages("tidyr")
+## Installing package into '/home/travis/R/Library'
+## (as 'lib' is unspecified)
+
+library(dplyr)
+## 
+## Attaching package: 'dplyr'
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+library(tidyr)
+```
+
 
 Mas antes de apresentar as principais funções do `dplyr` e do `tidyr`, precisamos falar sobre o conceito de `tibbles`.
 
@@ -38,6 +60,450 @@ Mas antes de apresentar as principais funções do `dplyr` e do `tidyr`, precisa
 
 
 
+
+## Trabalhando com tibbles
+
+Uma `tibble` nada mais é do que um `data.frame`, mas com um método de impressão mais adequado. 
+
+As `tibbles` são parte do pacote `tibble`. Assim, para começar a usá-las, instale e carregue o pacote.
+
+
+```r
+install.packages("tibble")
+library(tibble)
+```
+
+Mais informações sobre `tibbles` podem ser encontradas [neste link](http://r4ds.had.co.nz/tibbles.html).
+
+Nessa seção, vamos trabalhar com uma base simplificada do [PNUD (Programa das Nações Unidas para o Desenvolvimento)](http://www.atlasbrasil.org.br/2013/pt/download/base/), contendo informações socioeconômicas de todos os municípios do país. Os resultados foram obtidos a partir dos Censos de 1991, 2000 e 2010.
+
+A base contém 16686 linhas e 14 colunas, descritas abaixo:
+
+- `ano` - Ano do Censo utilizado como base para cálculo do IDH-Municipal e outras métricas.
+- `muni` - Nome do município. Cada município aparece três vezes, um para cada ano.
+- `uf` - Unidade Federativa.
+- `regiao` - Região brasileira.
+- `idhm` - IDH municipal, dividido em
+    - `idhm_e` - IDH municipal - educação.
+    - `idhm_l` - IDH municipal - longevidade.
+    - `idhm_r` - IDH municipal - renda.
+- `espvida` - Expectativa de vida.
+- `rdpc` - Renda *per capita*.
+- `gini` - Coeficiente de gini municipal (mede desigualdade social).
+- `pop` - População residente do município.
+- `lat`, `lon` - Latitude e longitude do município (ponto médio).
+
+Para acessar esta base, instale e carregue o pacote `abjData` da seguinte maneira:
+
+
+```r
+devtools::install_github("abjur/abjData")
+library(abjData)
+```
+
+Assim, utilizaremos o objeto `pnud_min` para acessar os dados.
+
+
+```r
+pnud_min
+## # A tibble: 16,686 x 14
+##      ano                  muni    uf regiao  idhm idhm_e idhm_l idhm_r
+##    <int>                 <chr> <chr>  <chr> <dbl>  <dbl>  <dbl>  <dbl>
+##  1  1991 ALTA FLORESTA D'OESTE    RO  Norte 0.329  0.112  0.617  0.516
+##  2  1991             ARIQUEMES    RO  Norte 0.432  0.199  0.684  0.593
+##  3  1991                CABIXI    RO  Norte 0.309  0.108  0.636  0.430
+##  4  1991                CACOAL    RO  Norte 0.407  0.171  0.667  0.593
+##  5  1991            CEREJEIRAS    RO  Norte 0.386  0.167  0.629  0.547
+##  6  1991     COLORADO DO OESTE    RO  Norte 0.376  0.151  0.658  0.536
+##  7  1991            CORUMBIARA    RO  Norte 0.203  0.039  0.572  0.373
+##  8  1991         COSTA MARQUES    RO  Norte 0.425  0.220  0.629  0.553
+##  9  1991       ESPIGÃO D'OESTE    RO  Norte 0.388  0.159  0.653  0.561
+## 10  1991         GUAJARÁ-MIRIM    RO  Norte 0.468  0.247  0.662  0.625
+## # ... with 16,676 more rows, and 6 more variables: espvida <dbl>,
+## #   rdpc <dbl>, gini <dbl>, pop <int>, lat <dbl>, lon <dbl>
+```
+
+Veja que, por padrão, apenas as dez primeiras linhas da `tibble` são impressas na tela. Além disso, as colunas que não couberem na largura do console serão omitidas. Também são apresentadas a dimensão da tabela e as classes de cada coluna.
+
+-----------------------------------------------------
+
+
+
+## O pacote `dplyr`
+
+O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em R que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados sem perder velocidade de execução.
+
+As principais funções do `dplyr` são:
+
+- `filter()` - filtra linhas
+- `select()` - seleciona colunas
+- `mutate()` - cria/modifica colunas
+- `arrange()` - ordena a base
+- `summarise()` - sumariza a base
+
+Todas essas funções seguem as mesmas características:
+
+- O _input_  é sempre uma `tibble` e o _output_  é sempre um `tibble`.
+- Colocamos o `tibble` no primeiro argumento e o que queremos fazer nos outros argumentos.
+- A utilização é facilitada com o emprego do operador `%>%`.
+- O pacote faz uso extensivo de NSE (*non standard evaluation*).
+
+As principais vantagens de se usar o `dplyr` em detrimento das funções do R base são:
+
+- Manipular dados se torna uma tarefa muito mais simples.
+- O código fica mais intuitivo de ser escrito e mais simples de ser lido.
+- O pacote `dplyr` utiliza `C` e `C++` por trás da maioria das funções, o que geralmente torna o código mais eficiente.
+- É possível trabalhar com diferentes fontes de dados, como bases relacionais (SQL) e `data.table`.
+
+Agora, vamos avaliar com mais detalhes os principais verbos do pacote `dplyr`.
+
+-----------------------------------------------------
+
+### `select()`
+
+A função `select()` seleciona colunas (variáveis). É possível utilizar nomes, índices, intervalos de variáveis ou utilizar as funções `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)` para selecionar as variáveis.
+
+
+```r
+pnud_min %>% 
+  select(ano, regiao, muni)
+## # A tibble: 16,686 x 3
+##      ano regiao                  muni
+##    <int>  <chr>                 <chr>
+##  1  1991  Norte ALTA FLORESTA D'OESTE
+##  2  1991  Norte             ARIQUEMES
+##  3  1991  Norte                CABIXI
+##  4  1991  Norte                CACOAL
+##  5  1991  Norte            CEREJEIRAS
+##  6  1991  Norte     COLORADO DO OESTE
+##  7  1991  Norte            CORUMBIARA
+##  8  1991  Norte         COSTA MARQUES
+##  9  1991  Norte       ESPIGÃO D'OESTE
+## 10  1991  Norte         GUAJARÁ-MIRIM
+## # ... with 16,676 more rows
+```
+
+
+```r
+pnud_min %>% 
+  select(ano:regiao, rdpc)
+## # A tibble: 16,686 x 5
+##      ano                  muni    uf regiao   rdpc
+##    <int>                 <chr> <chr>  <chr>  <dbl>
+##  1  1991 ALTA FLORESTA D'OESTE    RO  Norte 198.46
+##  2  1991             ARIQUEMES    RO  Norte 319.47
+##  3  1991                CABIXI    RO  Norte 116.38
+##  4  1991                CACOAL    RO  Norte 320.24
+##  5  1991            CEREJEIRAS    RO  Norte 240.10
+##  6  1991     COLORADO DO OESTE    RO  Norte 224.82
+##  7  1991            CORUMBIARA    RO  Norte  81.38
+##  8  1991         COSTA MARQUES    RO  Norte 250.08
+##  9  1991       ESPIGÃO D'OESTE    RO  Norte 263.03
+## 10  1991         GUAJARÁ-MIRIM    RO  Norte 391.37
+## # ... with 16,676 more rows
+```
+
+
+```r
+pnud_min %>% 
+  select(ano, starts_with('idhm'))
+## # A tibble: 16,686 x 5
+##      ano  idhm idhm_e idhm_l idhm_r
+##    <int> <dbl>  <dbl>  <dbl>  <dbl>
+##  1  1991 0.329  0.112  0.617  0.516
+##  2  1991 0.432  0.199  0.684  0.593
+##  3  1991 0.309  0.108  0.636  0.430
+##  4  1991 0.407  0.171  0.667  0.593
+##  5  1991 0.386  0.167  0.629  0.547
+##  6  1991 0.376  0.151  0.658  0.536
+##  7  1991 0.203  0.039  0.572  0.373
+##  8  1991 0.425  0.220  0.629  0.553
+##  9  1991 0.388  0.159  0.653  0.561
+## 10  1991 0.468  0.247  0.662  0.625
+## # ... with 16,676 more rows
+```
+
+-----------------------------------------------------
+
+### `filter()`
+
+A função `filter()` filtra linhas. Ela é semelhante à função `subset()`, do R base.
+
+
+```r
+pnud_min %>% 
+  select(ano, muni, uf) %>% 
+  filter(uf == 'AC')
+## # A tibble: 66 x 3
+##      ano            muni    uf
+##    <int>           <chr> <chr>
+##  1  1991      ACRELÂNDIA    AC
+##  2  1991    ASSIS BRASIL    AC
+##  3  1991       BRASILÉIA    AC
+##  4  1991          BUJARI    AC
+##  5  1991        CAPIXABA    AC
+##  6  1991 CRUZEIRO DO SUL    AC
+##  7  1991  EPITACIOLÂNDIA    AC
+##  8  1991           FEIJÓ    AC
+##  9  1991          JORDÃO    AC
+## 10  1991     MÂNCIO LIMA    AC
+## # ... with 56 more rows
+```
+
+Para fazer várias condições, use os operadores lógicos `&` e `|` ou separe filtros entre vírgulas.
+
+
+```r
+pnud_min %>% 
+  select(ano, regiao, uf, idhm) %>% 
+  filter(uf %in% c('SP', 'MG') | idhm > .5, ano == 2010)
+## # A tibble: 5,527 x 4
+##      ano regiao    uf  idhm
+##    <int>  <chr> <chr> <dbl>
+##  1  2010  Norte    RO 0.641
+##  2  2010  Norte    RO 0.702
+##  3  2010  Norte    RO 0.650
+##  4  2010  Norte    RO 0.718
+##  5  2010  Norte    RO 0.692
+##  6  2010  Norte    RO 0.685
+##  7  2010  Norte    RO 0.613
+##  8  2010  Norte    RO 0.611
+##  9  2010  Norte    RO 0.672
+## 10  2010  Norte    RO 0.657
+## # ... with 5,517 more rows
+```
+
+Repare que o operador `%in%` é muito útil para trabalhar com vetores. O resultado da operação é um vetor lógico o tamanho do vetor do elemento da esquerda, identificando quais elementos da esquerda batem com algum elemento da direita.
+
+Também podemos usar funções que retornam valores lógicos, como a `str_detect()`.
+
+
+```r
+library(stringr)
+
+pnud_min %>% 
+  select(muni, ano, uf) %>% 
+  filter(str_detect(muni, '^[HG]|S$'), 
+         ano == 1991)
+## # A tibble: 970 x 3
+##                         muni   ano    uf
+##                        <chr> <int> <chr>
+##  1                 ARIQUEMES  1991    RO
+##  2                CEREJEIRAS  1991    RO
+##  3             COSTA MARQUES  1991    RO
+##  4             GUAJARÁ-MIRIM  1991    RO
+##  5   ALTO ALEGRE DOS PARECIS  1991    RO
+##  6                   BURITIS  1991    RO
+##  7              CASTANHEIRAS  1991    RO
+##  8 GOVERNADOR JORGE TEIXEIRA  1991    RO
+##  9                   PARECIS  1991    RO
+## 10              SERINGUEIRAS  1991    RO
+## # ... with 960 more rows
+```
+
+-----------------------------------------------------
+
+### `mutate()`
+
+A função `mutate()` cria ou modifica colunas. Ela é equivalente à função `transform()`, mas aceita várias novas colunas iterativamente. Novas variáveis devem ter o mesmo número de linhas da base original (ou terem comprimento 1).
+
+
+```r
+pnud_min %>% 
+  select(muni, rdpc, pop, idhm_l, espvida) %>% 
+  mutate(renda = rdpc * pop, 
+         razao = idhm_l / espvida)
+## # A tibble: 16,686 x 7
+##                     muni   rdpc   pop idhm_l espvida      renda
+##                    <chr>  <dbl> <int>  <dbl>   <dbl>      <dbl>
+##  1 ALTA FLORESTA D'OESTE 198.46 22835  0.617   62.01  4531834.1
+##  2             ARIQUEMES 319.47 55018  0.684   66.02 17576600.5
+##  3                CABIXI 116.38  5846  0.636   63.16   680357.5
+##  4                CACOAL 320.24 66534  0.667   65.03 21306848.2
+##  5            CEREJEIRAS 240.10 19030  0.629   62.73  4569103.0
+##  6     COLORADO DO OESTE 224.82 25070  0.658   64.46  5636237.4
+##  7            CORUMBIARA  81.38 10737  0.572   59.32   873777.1
+##  8         COSTA MARQUES 250.08  6902  0.629   62.76  1726052.2
+##  9       ESPIGÃO D'OESTE 263.03 22505  0.653   64.18  5919490.1
+## 10         GUAJARÁ-MIRIM 391.37 31240  0.662   64.71 12226398.8
+## # ... with 16,676 more rows, and 1 more variables: razao <dbl>
+```
+
+-----------------------------------------------------
+
+### `arrange()`
+
+A função `arrange()` ordena a base. O argumento `desc=` pode ser utilizado para gerar uma ordem decrescente.
+
+
+```r
+pnud_min %>% 
+  filter(ano == 2010) %>% 
+  arrange(desc(espvida))
+## # A tibble: 5,562 x 14
+##      ano               muni    uf regiao  idhm idhm_e idhm_l idhm_r
+##    <int>              <chr> <chr>  <chr> <dbl>  <dbl>  <dbl>  <dbl>
+##  1  2010           BLUMENAU    SC    Sul 0.806  0.722  0.894  0.812
+##  2  2010            BRUSQUE    SC    Sul 0.795  0.707  0.894  0.794
+##  3  2010 BALNEÁRIO CAMBORIÚ    SC    Sul 0.845  0.789  0.894  0.854
+##  4  2010         RIO DO SUL    SC    Sul 0.802  0.727  0.894  0.793
+##  5  2010    RANCHO QUEIMADO    SC    Sul 0.753  0.644  0.893  0.743
+##  6  2010       RIO DO OESTE    SC    Sul 0.754  0.625  0.892  0.769
+##  7  2010             IOMERÊ    SC    Sul 0.795  0.749  0.891  0.754
+##  8  2010            JOAÇABA    SC    Sul 0.827  0.771  0.891  0.823
+##  9  2010        NOVA TRENTO    SC    Sul 0.748  0.628  0.891  0.749
+## 10  2010        PORTO UNIÃO    SC    Sul 0.786  0.724  0.891  0.752
+## # ... with 5,552 more rows, and 6 more variables: espvida <dbl>,
+## #   rdpc <dbl>, gini <dbl>, pop <int>, lat <dbl>, lon <dbl>
+```
+
+-----------------------------------------------------
+
+### `summarise`
+
+A função `summarise()` sumariza a base. Ela aplica uma função às variáveis, retornando um vetor de tamanho `1`. Geralmente ela é utilizada em conjunto da função `group_by()`.
+
+
+
+```r
+pnud_min %>% 
+  group_by(regiao, uf) %>% 
+  summarise(n = n(), espvida = mean(espvida)) %>% 
+  arrange(regiao, desc(espvida))
+## # A tibble: 27 x 4
+## # Groups:   regiao [5]
+##          regiao    uf     n  espvida
+##           <chr> <chr> <int>    <dbl>
+##  1 Centro-Oeste    DF     3 73.36000
+##  2 Centro-Oeste    GO   735 69.95346
+##  3 Centro-Oeste    MS   234 69.94291
+##  4 Centro-Oeste    MT   423 69.42915
+##  5     Nordeste    CE   552 65.60627
+##  6     Nordeste    RN   501 65.11439
+##  7     Nordeste    PE   555 64.92721
+##  8     Nordeste    BA  1251 64.62361
+##  9     Nordeste    SE   225 64.26031
+## 10     Nordeste    PI   672 64.04028
+## # ... with 17 more rows
+
+# A função n() costuma ser bastante utilizada com a função summarise().
+```
+
+A função `count()` também pode ser usada para sumarizar em relação à frequência.
+
+
+```r
+pnud_min %>% 
+  filter(ano == 2010) %>% 
+  count(regiao, sort = TRUE) %>% 
+  mutate(prop = n / sum(n), prop = scales::percent(prop))
+## # A tibble: 5 x 3
+##         regiao     n  prop
+##          <chr> <int> <chr>
+## 1     Nordeste  1794 32.3%
+## 2      Sudeste  1667 30.0%
+## 3          Sul  1187 21.3%
+## 4 Centro-Oeste   465  8.4%
+## 5        Norte   449  8.1%
+```
+
+### Outras funções do `dplyr`
+
+- Para retirar duplicatas, utilizar `distinct()`.
+- Para realizar operações mais gerais, usar `do`.
+- Para juntar tabelas, usar `inner_join()`, `left_join()`, `anti_join()` etc.
+
+**Exercício**: estudar o `help()` dessas funções e criar exemplos com elas utilizando a base `pnud_min`.
+
+
+
+## O pacote `tidyr`
+
+O pacote `tidyr` dispõe de funções úteis para deixar os seus dados no formato que você precisa para a análise. Na maioria das vezes, utilizamos para deixá-los _tidy_. Outras, precisamos "bagunçá-los" um pouco para poder aplicar alguma função.
+
+Nesse sentido, as principais funções são a `gather()` e a `spread()`
+
+-----------------------------------------------------
+
+### `gather()`
+
+A função `gather()` "empilha" o banco de dados. Ela é utilizada principalmente quando as colunas da base não representam nomes de variáveis, mas sim seus valores.
+
+
+```r
+pnud_min %>% 
+  select(uf, muni, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  arrange(desc(idhm))
+## # A tibble: 50,058 x 5
+##       uf               muni   ano tipo_idhm  idhm
+##    <chr>              <chr> <int>     <chr> <dbl>
+##  1    SC BALNEÁRIO CAMBORIÚ  2010    idhm_l 0.894
+##  2    SC           BLUMENAU  2010    idhm_l 0.894
+##  3    SC            BRUSQUE  2010    idhm_l 0.894
+##  4    SC         RIO DO SUL  2010    idhm_l 0.894
+##  5    SC    RANCHO QUEIMADO  2010    idhm_l 0.893
+##  6    SC       RIO DO OESTE  2010    idhm_l 0.892
+##  7    SC             IOMERÊ  2010    idhm_l 0.891
+##  8    SC            JOAÇABA  2010    idhm_l 0.891
+##  9    SC        NOVA TRENTO  2010    idhm_l 0.891
+## 10    SC        PORTO UNIÃO  2010    idhm_l 0.891
+## # ... with 50,048 more rows
+```
+
+
+-----------------------------------------------------
+### `spread()`
+
+A função `spread()` é essencialmente o inverso da `gather()`. Ela espalha uma variável nas colunas.
+
+
+```r
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  spread(ano, idhm)
+## # A tibble: 16,686 x 6
+##                   muni    uf tipo_idhm `1991` `2000` `2010`
+##  *               <chr> <chr>     <chr>  <dbl>  <dbl>  <dbl>
+##  1     ABADIA DE GOIÁS    GO    idhm_e  0.183  0.386  0.622
+##  2     ABADIA DE GOIÁS    GO    idhm_l  0.658  0.765  0.830
+##  3     ABADIA DE GOIÁS    GO    idhm_r  0.563  0.623  0.687
+##  4 Abadia dos Dourados    MG    idhm_e  0.225  0.387  0.563
+##  5 Abadia dos Dourados    MG    idhm_l  0.728  0.799  0.839
+##  6 Abadia dos Dourados    MG    idhm_r  0.551  0.616  0.693
+##  7           ABADIÂNIA    GO    idhm_e  0.188  0.292  0.579
+##  8           ABADIÂNIA    GO    idhm_l  0.656  0.730  0.841
+##  9           ABADIÂNIA    GO    idhm_r  0.560  0.598  0.671
+## 10              Abaeté    MG    idhm_e  0.180  0.385  0.556
+## # ... with 16,676 more rows
+```
+
+-----------------------------------------------------
+
+### Outras funções do `tidyr`
+
+- A função `unite()` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
+- A função `separate()` faz o inverso de `unite()`: transforma uma coluna em várias usando um separador.
+
+
+```r
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  separate(tipo_idhm, c('idhm_nm', 'tipo'), sep = '_') %>% 
+  select(-idhm_nm) %>% 
+  filter(ano == 2010) %>% 
+  group_by(tipo) %>% 
+  summarise(maior = muni[which.max(idhm)], idhm = max(idhm)) %>% 
+  arrange(tipo, desc(idhm))
+## # A tibble: 3 x 3
+##    tipo              maior  idhm
+##   <chr>              <chr> <dbl>
+## 1     e ÁGUAS DE SÃO PEDRO 0.825
+## 2     l BALNEÁRIO CAMBORIÚ 0.894
+## 3     r SÃO CAETANO DO SUL 0.891
+```
 
 
 
