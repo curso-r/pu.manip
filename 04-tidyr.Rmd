@@ -1,0 +1,55 @@
+---
+author: "Julio Trecenti, William Amorim"
+---
+
+## O pacote `tidyr`
+
+O pacote `tidyr` dispõe de funções úteis para deixar os seus dados no formato que você precisa para a análise. Na maioria das vezes, utilizamos para deixá-los _tidy_. Outras, precisamos "bagunçá-los" um pouco para poder aplicar alguma função.
+
+Nesse sentido, as principais funções são a `gather()` e a `spread()`
+
+-----------------------------------------------------
+
+### `gather()`
+
+A função `gather()` "empilha" o banco de dados. Ela é utilizada principalmente quando as colunas da base não representam nomes de variáveis, mas sim seus valores.
+
+```{r warning=FALSE, message=FALSE}
+pnud_min %>% 
+  select(uf, muni, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  arrange(desc(idhm))
+```
+
+
+-----------------------------------------------------
+### `spread()`
+
+A função `spread()` é essencialmente o inverso da `gather()`. Ela espalha uma variável nas colunas.
+
+```{r}
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  spread(ano, idhm)
+```
+
+-----------------------------------------------------
+
+### Outras funções do `tidyr`
+
+- A função `unite()` junta duas ou mais colunas usando algum separador (`_`, por exemplo).
+- A função `separate()` faz o inverso de `unite()`: transforma uma coluna em várias usando um separador.
+
+```{r}
+pnud_min %>% 
+  select(muni, uf, ano, starts_with('idhm_')) %>% 
+  gather(tipo_idhm, idhm, starts_with('idhm_')) %>% 
+  separate(tipo_idhm, c('idhm_nm', 'tipo'), sep = '_') %>% 
+  select(-idhm_nm) %>% 
+  filter(ano == 2010) %>% 
+  group_by(tipo) %>% 
+  summarise(maior = muni[which.max(idhm)], idhm = max(idhm)) %>% 
+  arrange(tipo, desc(idhm))
+```
+

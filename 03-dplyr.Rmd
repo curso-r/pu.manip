@@ -1,0 +1,144 @@
+---
+author: "Julio Trecenti, William Amorim"
+---
+
+## O pacote `dplyr`
+
+O `dplyr` é o pacote mais útil para realizar transformação de dados, aliando simplicidade e eficiência de uma forma elegante. Os scripts em R que fazem uso inteligente dos verbos `dplyr` e as facilidades do operador _pipe_ tendem a ficar mais legíveis e organizados sem perder velocidade de execução.
+
+As principais funções do `dplyr` são:
+
+- `filter()` - filtra linhas
+- `select()` - seleciona colunas
+- `mutate()` - cria/modifica colunas
+- `arrange()` - ordena a base
+- `summarise()` - sumariza a base
+
+Todas essas funções seguem as mesmas características:
+
+- O _input_  é sempre uma `tibble` e o _output_  é sempre um `tibble`.
+- Colocamos o `tibble` no primeiro argumento e o que queremos fazer nos outros argumentos.
+- A utilização é facilitada com o emprego do operador `%>%`.
+- O pacote faz uso extensivo de NSE (*non standard evaluation*).
+
+As principais vantagens de se usar o `dplyr` em detrimento das funções do R base são:
+
+- Manipular dados se torna uma tarefa muito mais simples.
+- O código fica mais intuitivo de ser escrito e mais simples de ser lido.
+- O pacote `dplyr` utiliza `C` e `C++` por trás da maioria das funções, o que geralmente torna o código mais eficiente.
+- É possível trabalhar com diferentes fontes de dados, como bases relacionais (SQL) e `data.table`.
+
+Agora, vamos avaliar com mais detalhes os principais verbos do pacote `dplyr`.
+
+-----------------------------------------------------
+
+### `select()`
+
+A função `select()` seleciona colunas (variáveis). É possível utilizar nomes, índices, intervalos de variáveis ou utilizar as funções `starts_with(x)`, `contains(x)`, `matches(x)`, `one_of(x)` para selecionar as variáveis.
+
+```{r}
+pnud_min %>% 
+  select(ano, regiao, muni)
+```
+
+```{r}
+pnud_min %>% 
+  select(ano:regiao, rdpc)
+```
+
+```{r}
+pnud_min %>% 
+  select(ano, starts_with('idhm'))
+```
+
+-----------------------------------------------------
+
+### `filter()`
+
+A função `filter()` filtra linhas. Ela é semelhante à função `subset()`, do R base.
+
+```{r}
+pnud_min %>% 
+  select(ano, muni, uf) %>% 
+  filter(uf == 'AC')
+```
+
+Para fazer várias condições, use os operadores lógicos `&` e `|` ou separe filtros entre vírgulas.
+
+```{r}
+pnud_min %>% 
+  select(ano, regiao, uf, idhm) %>% 
+  filter(uf %in% c('SP', 'MG') | idhm > .5, ano == 2010)
+```
+
+Repare que o operador `%in%` é muito útil para trabalhar com vetores. O resultado da operação é um vetor lógico o tamanho do vetor do elemento da esquerda, identificando quais elementos da esquerda batem com algum elemento da direita.
+
+Também podemos usar funções que retornam valores lógicos, como a `str_detect()`.
+
+```{r}
+library(stringr)
+
+pnud_min %>% 
+  select(muni, ano, uf) %>% 
+  filter(str_detect(muni, '^[HG]|S$'), 
+         ano == 1991)
+```
+
+-----------------------------------------------------
+
+### `mutate()`
+
+A função `mutate()` cria ou modifica colunas. Ela é equivalente à função `transform()`, mas aceita várias novas colunas iterativamente. Novas variáveis devem ter o mesmo número de linhas da base original (ou terem comprimento 1).
+
+```{r}
+pnud_min %>% 
+  select(muni, rdpc, pop, idhm_l, espvida) %>% 
+  mutate(renda = rdpc * pop, 
+         razao = idhm_l / espvida)
+  
+```
+
+-----------------------------------------------------
+
+### `arrange()`
+
+A função `arrange()` ordena a base. O argumento `desc=` pode ser utilizado para gerar uma ordem decrescente.
+
+```{r}
+pnud_min %>% 
+  filter(ano == 2010) %>% 
+  arrange(desc(espvida))
+```
+
+-----------------------------------------------------
+
+### `summarise`
+
+A função `summarise()` sumariza a base. Ela aplica uma função às variáveis, retornando um vetor de tamanho `1`. Geralmente ela é utilizada em conjunto da função `group_by()`.
+
+
+```{r}
+pnud_min %>% 
+  group_by(regiao, uf) %>% 
+  summarise(n = n(), espvida = mean(espvida)) %>% 
+  arrange(regiao, desc(espvida))
+
+# A função n() costuma ser bastante utilizada com a função summarise().
+```
+
+A função `count()` também pode ser usada para sumarizar em relação à frequência.
+
+```{r}
+pnud_min %>% 
+  filter(ano == 2010) %>% 
+  count(regiao, sort = TRUE) %>% 
+  mutate(prop = n / sum(n), prop = scales::percent(prop))
+```
+
+### Outras funções do `dplyr`
+
+- Para retirar duplicatas, utilizar `distinct()`.
+- Para realizar operações mais gerais, usar `do`.
+- Para juntar tabelas, usar `inner_join()`, `left_join()`, `anti_join()` etc.
+
+**Exercício**: estudar o `help()` dessas funções e criar exemplos com elas utilizando a base `pnud_min`.
